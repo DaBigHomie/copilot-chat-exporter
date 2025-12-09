@@ -1,0 +1,95 @@
+{
+  "name": "copilot-chat-exporter",
+  "displayName": "Copilot Chat Exporter",
+  "description": "Automatically export GitHub Copilot chat sessions to JSON/Markdown and PostgreSQL",
+  "version": "0.1.0",
+  "publisher": "damieus",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:copilot-chat-exporter.exportCurrentSession",
+    "onCommand:copilot-chat-exporter.exportAllSessions",
+    "onCommand:copilot-chat-exporter.setupAutoExport"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "copilot-chat-exporter.exportCurrentSession",
+        "title": "Export Current Copilot Chat Session"
+      },
+      {
+        "command": "copilot-chat-exporter.exportAllSessions",
+        "title": "Export All Copilot Chat Sessions"
+      },
+      {
+        "command": "copilot-chat-exporter.setupAutoExport",
+        "title": "Setup Auto-Export on Chat End"
+      }
+    ],
+    "configuration": {
+      "title": "Copilot Chat Exporter",
+      "properties": {
+        "copilotChatExporter.outputDirectory": {
+          "type": "string",
+          "default": ".github/chats",
+          "description": "Directory to save exported chat sessions"
+        },
+        "copilotChatExporter.exportFormat": {
+          "type": "array",
+          "default": [
+            "json",
+            "markdown"
+          ],
+          "description": "Export formats (json, markdown, both)"
+        },
+        "copilotChatExporter.autoExport": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically export chat sessions when closed"
+        },
+        "copilotChatExporter.databaseEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable PostgreSQL database export"
+        },
+        "copilotChatExporter.databaseConfig": {
+          "type": "object",
+          "default": {
+            "host": "localhost",
+            "port": 5432,
+            "database": "copilot_chats",
+            "user": "postgres"
+          },
+          "description": "PostgreSQL connection configuration"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/pg": "^8.15.6",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "@vscode/test-electron": "^2.3.8",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
